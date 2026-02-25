@@ -98,6 +98,6 @@ All coin references use names (`"BTC"`, `"ETH"`, `"xyz:SILVER"`) — the service
 
 ## API Docs
 
-Full API reference, error codes, and fees: **https://send.hypercoretrade.xyz**
+Full API reference, error codes, and fees: **https://hypercoretrade.xyz**
 
-Wallet-based approval (no code needed): **https://send.hypercoretrade.xyz/approve**
+Wallet-based approval (no code needed): **https://hypercoretrade.xyz/approve**
