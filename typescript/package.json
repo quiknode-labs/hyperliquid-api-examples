@@ -1,0 +1,23 @@
+{
+  "name": "hypercore-trade-examples",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "approve": "ts-node src/approve.ts",
+    "checkStatus": "ts-node src/checkStatus.ts",
+    "revoke": "ts-node src/revoke.ts",
+    "placeOrder": "ts-node src/placeOrder.ts",
+    "cancelOrder": "ts-node src/cancelOrder.ts",
+    "modifyOrder": "ts-node src/modifyOrder.ts",
+    "listMarkets": "ts-node src/listMarkets.ts",
+    "roundtrip": "ts-node src/roundtrip.ts",
+    "hip3Order": "ts-node src/hip3Order.ts"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.0"
+  }
+}

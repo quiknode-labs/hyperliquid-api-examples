@@ -1,0 +1,66 @@
+import { rpc, signHash, getMid } from "./client";
+
+const COIN = "BTC";
+
+async function sendOrder(isBuy: boolean, px: string, sz: string) {
+  const action = {
+    type: "order",
+    orders: [{ a: COIN, b: isBuy, p: px, s: sz, r: false, t: { limit: { tif: "Ioc" } } }],
+    grouping: "na",
+  };
+
+  const res = await rpc("hl_buildOrder", { action });
+  const sig = await signHash(res.result.hash);
+
+  return rpc("hl_sendOrder", {
+    action: res.result.action || action,
+    nonce: res.result.nonce,
+    signature: sig,
+  });
+}
+
+function checkStatuses(resp: any, label: string): boolean {
+  const statuses = resp?.response?.data?.statuses || [];
+  for (const s of statuses) {
+    if (s.error) {
+      console.error(`${label} error: ${s.error}`);
+      return false;
+    }
+  }
+  return true;
+}
+
+async function main() {
+  const mid = await getMid(COIN);
+  if (mid === 0) {
+    console.error(`Could not fetch ${COIN} mid price`);
+    process.exit(1);
+  }
+
+  const sz = (11.0 / mid).toFixed(5);
+  console.log(`${COIN} mid: $${mid.toLocaleString()}`);
+  console.log(`Trade size: ${sz} ${COIN} (~$${(parseFloat(sz) * mid).toFixed(2)})\n`);
+
+  const buyPx = Math.floor(mid * 1.03).toString();
+  console.log(`BUY ${sz} @ ${buyPx} (IOC)`);
+  const buyResult = await sendOrder(true, buyPx, sz);
+  const buyResp = buyResult.result.exchangeResponse;
+  if (!checkStatuses(buyResp, "BUY")) {
+    process.exit(1);
+  }
+  console.log(`Buy filled: ${JSON.stringify(buyResp, null, 2)}\n`);
+
+  await new Promise((r) => setTimeout(r, 1000));
+
+  const sellPx = Math.floor(mid * 0.97).toString();
+  console.log(`SELL ${sz} @ ${sellPx} (IOC)`);
+  const sellResult = await sendOrder(false, sellPx, sz);
+  const sellResp = sellResult.result.exchangeResponse;
+  if (!checkStatuses(sellResp, "SELL")) {
+    process.exit(1);
+  }
+  console.log(`Sell filled: ${JSON.stringify(sellResp, null, 2)}`);
+  console.log("\nRound-trip complete. Position should be flat.");
+}
+
+main();

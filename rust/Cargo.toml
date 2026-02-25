@@ -1,0 +1,50 @@
+[package]
+name = "hypercore-trade-examples"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+
+[dependencies]
+alloy = { version = "1.5.2", default-features = false, features = ["signer-local", "signers"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+hex = "0.4"
+
+[[example]]
+name = "approve"
+path = "examples/approve.rs"
+
+[[example]]
+name = "check_status"
+path = "examples/check_status.rs"
+
+[[example]]
+name = "revoke"
+path = "examples/revoke.rs"
+
+[[example]]
+name = "place_order"
+path = "examples/place_order.rs"
+
+[[example]]
+name = "cancel_order"
+path = "examples/cancel_order.rs"
+
+[[example]]
+name = "list_markets"
+path = "examples/list_markets.rs"
+
+[[example]]
+name = "open_orders"
+path = "examples/open_orders.rs"
+
+[[example]]
+name = "order_status"
+path = "examples/order_status.rs"
+
+[[example]]
+name = "roundtrip"
+path = "examples/roundtrip.rs"

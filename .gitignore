@@ -1,0 +1,4 @@
+rust/target/
+typescript/node_modules/
+python/__pycache__/
+.env
