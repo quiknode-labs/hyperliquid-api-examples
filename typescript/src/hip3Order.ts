@@ -9,7 +9,7 @@ async function main() {
     mid = 78.0;
   }
 
-  const sz = (10.0 / mid).toFixed(2);
+  const sz = (11.0 / mid).toFixed(2);
   const buyPx = (mid * 1.03).toFixed(2);
 
   console.log(`${COIN} mid: $${mid.toFixed(2)}`);

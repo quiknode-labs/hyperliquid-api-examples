@@ -13,7 +13,7 @@ async fn main() {
         mid = 78.0;
     }
 
-    let sz = format!("{:.2}", 10.0 / mid);
+    let sz = format!("{:.2}", 11.0 / mid);
     let buy_px = format!("{:.2}", mid * 1.03);
 
     println!("{COIN} mid: ${mid:.2}");
