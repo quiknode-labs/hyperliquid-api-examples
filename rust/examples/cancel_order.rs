@@ -19,38 +19,28 @@ async fn main() {
     println!("{COIN} mid: ${mid:.2}");
     println!("Placing resting BUY {sz} @ {rest_px} (GTC, 3% below mid)\n");
 
-    let order_action = json!({
-        "type": "order",
-        "orders": [{"a": COIN, "b": true, "p": rest_px, "s": sz, "r": false, "t": {"limit": {"tif": "Gtc"}}}],
-        "grouping": "na",
-    });
-
     let res = client
-        .rpc("hl_buildOrder", json!({"action": order_action}))
+        .exchange(&json!({
+            "action": {
+                "type": "order",
+                "orders": [{"asset": COIN, "side": "buy", "price": rest_px, "size": sz, "tif": "gtc"}],
+            },
+        }))
         .await;
 
-    let hash = res["result"]["hash"].as_str().unwrap();
+    let hash = res["hash"].as_str().unwrap();
     let sig = client.sign_hash(hash).await;
 
-    let resolved = if res["result"]["action"].is_object() {
-        res["result"]["action"].clone()
-    } else {
-        order_action
-    };
-
     let result = client
-        .rpc(
-            "hl_sendOrder",
-            json!({
-                "action": resolved,
-                "nonce": res["result"]["nonce"],
-                "signature": sig,
-            }),
-        )
+        .exchange(&json!({
+            "action": res["action"],
+            "nonce": res["nonce"],
+            "signature": sig,
+        }))
         .await;
 
-    let exchange = &result["result"]["exchangeResponse"];
-    let statuses = exchange["response"]["data"]["statuses"]
+    let exchange_resp = &result["exchangeResponse"];
+    let statuses = exchange_resp["response"]["data"]["statuses"]
         .as_array()
         .expect("No statuses in response");
 
@@ -67,27 +57,22 @@ async fn main() {
         "cancels": [{"a": COIN, "o": oid}],
     });
 
-    let res = client
-        .rpc("hl_buildCancel", json!({"action": cancel_action}))
-        .await;
+    let res = client.exchange(&json!({"action": cancel_action})).await;
 
-    let hash = res["result"]["hash"].as_str().unwrap();
+    let hash = res["hash"].as_str().unwrap();
     let sig = client.sign_hash(hash).await;
 
     let cancel_result = client
-        .rpc(
-            "hl_sendCancel",
-            json!({
-                "action": cancel_action,
-                "nonce": res["result"]["nonce"],
-                "signature": sig,
-            }),
-        )
+        .exchange(&json!({
+            "action": cancel_action,
+            "nonce": res["nonce"],
+            "signature": sig,
+        }))
         .await;
 
     println!(
         "{}",
-        serde_json::to_string_pretty(&cancel_result["result"]["exchangeResponse"]).unwrap()
+        serde_json::to_string_pretty(&cancel_result["exchangeResponse"]).unwrap()
     );
     println!("\nOrder cancelled.");
 }
