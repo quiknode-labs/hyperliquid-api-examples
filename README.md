@@ -101,3 +101,7 @@ All coin references use names (`"BTC"`, `"ETH"`, `"xyz:SILVER"`) — the service
 Full API reference, error codes, and fees: **https://hyperliquidapi.com**
 
 Wallet-based approval (no code needed): **https://hyperliquidapi.com/approve**
+
+## Disclaimer
+
+Hyperliquid API & hyperliquidapi.com are not affiliated with Hyperliquid Corp or Hyper Foundation.
