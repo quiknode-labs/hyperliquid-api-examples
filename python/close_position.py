@@ -7,6 +7,9 @@ COIN = "HYPE"
 
 print(f"Closing {COIN} position for {address}\n")
 
+# Optional: custom slippage (default 3%, range 0.1%-10%)
+# res = exchange({"action": {...}, "slippage": 0.05})  # 5% slippage
+
 res = exchange({
     "action": {
         "type": "closePosition",

@@ -8,6 +8,9 @@ SIZE = "0.00011"
 
 print(f"Market BUY {SIZE} {COIN}\n")
 
+# Optional: custom slippage (default 3%, range 0.1%-10%)
+# res = exchange({"action": {...}, "slippage": 0.05})  # 5% slippage
+
 res = exchange({
     "action": {
         "type": "order",
@@ -21,7 +24,7 @@ res = exchange({
 })
 
 computed_price = res["action"]["orders"][0]["p"]
-print(f"Computed price (mid + 3% slippage): {computed_price}")
+print(f"Computed price (mid + slippage, default 3%): {computed_price}")
 print(f"Builder fee: {res['builderFee']}")
 
 sig = sign_hash(res["hash"])

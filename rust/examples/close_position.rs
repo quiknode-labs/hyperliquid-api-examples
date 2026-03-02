@@ -9,6 +9,9 @@ async fn main() {
 
     println!("Closing {COIN} position for {}\n", client.address);
 
+    // Optional: custom slippage (default 3%, range 0.1%-10%)
+    // .exchange(&json!({"action": {...}, "slippage": 0.05}))  // 5% slippage
+
     let res = client
         .exchange(&json!({
             "action": {
