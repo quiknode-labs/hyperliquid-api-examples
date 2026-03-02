@@ -6,6 +6,9 @@ const SIZE = "0.00011";
 async function main() {
   console.log(`Market BUY ${SIZE} ${COIN}\n`);
 
+  // Optional: custom slippage (default 3%, range 0.1%-10%)
+  // const res = await exchange({ action: {...}, slippage: 0.05 });  // 5% slippage
+
   const res = await exchange({
     action: {
       type: "order",
@@ -14,7 +17,7 @@ async function main() {
   });
 
   const computedPrice = res.action.orders[0].p;
-  console.log(`Computed price (mid + 3% slippage): ${computedPrice}`);
+  console.log(`Computed price (mid + slippage, default 3%): ${computedPrice}`);
   console.log(`Builder fee: ${res.builderFee}`);
 
   const sig = await signHash(res.hash);

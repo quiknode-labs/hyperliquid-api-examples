@@ -10,6 +10,9 @@ async fn main() {
 
     println!("Market BUY {SIZE} {COIN}\n");
 
+    // Optional: custom slippage (default 3%, range 0.1%-10%)
+    // .exchange(&json!({"action": {...}, "slippage": 0.05}))  // 5% slippage
+
     let res = client
         .exchange(&json!({
             "action": {
@@ -20,7 +23,7 @@ async fn main() {
         .await;
 
     let computed_price = res["action"]["orders"][0]["p"].as_str().unwrap_or("?");
-    println!("Computed price (mid + 3% slippage): {computed_price}");
+    println!("Computed price (mid + slippage, default 3%): {computed_price}");
     println!("Builder fee: {}", res["builderFee"]);
 
     let hash = res["hash"].as_str().unwrap();
