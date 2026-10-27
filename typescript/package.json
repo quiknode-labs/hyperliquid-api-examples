@@ -14,7 +14,7 @@
     "hip3Order": "ts-node src/hip3Order.ts"
   },
   "dependencies": {
-    "ethers": "^6.13.0"
+    "ethers": "^6.17.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
